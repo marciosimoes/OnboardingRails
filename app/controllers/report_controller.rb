@@ -1,6 +1,7 @@
 class ReportController < ApplicationController
   require 'csv'
   require 'time'
+  require 'rest_client'
 
   def index
     @records = Dir.glob("public/uploads/reports/*.csv")
@@ -18,6 +19,10 @@ class ReportController < ApplicationController
         # How puts line break here
       end
     end
+
+    RestClient.post('http://localhost:4500/send_email',
+      :arquivo => File.new(file))
+
     @file = file
   end
 end
